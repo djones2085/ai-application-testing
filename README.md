@@ -25,10 +25,10 @@ A checklist and project plan for developing and deploying a Google Agent Develop
 - [X] **Crucial:** ADK Agent serving mechanism for Cloud Run determined:
     - [X] Will use FastAPI and Uvicorn with a custom `main.py` as per ADK documentation for `gcloud run deploy`.
     - [ ] Create `main.py` in the project root to initialize the FastAPI app using `google.adk.cli.fast_api.get_fast_api_app()` and run it with `uvicorn`.
-    - [ ] Ensure `multi_tool_agent/__init__.py` is set up (e.g., `from . import agent` or `from .agent import root_agent`) so `main.py` can load the agent.
-- [ ] Add `fastapi` and `uvicorn[standard]` to `requirements.txt`.
-- [ ] Agent tested locally by running `python main.py` (or `uvicorn main:app --reload`) and sending HTTP requests.
-- [ ] Local testing confirms interaction with any necessary services (e.g., Vertex AI if configured).
+    - [X] Ensure `multi_tool_agent/__init__.py` is set up (e.g., `from . import agent` or `from .agent import root_agent`) so `main.py` can load the agent.
+- [X] Add `fastapi` and `uvicorn[standard]` to `requirements.txt`.
+- [X] Agent tested locally by running `python main.py` (or `uvicorn main:app --reload`) and sending HTTP requests.
+- [X] Local testing confirms interaction with any necessary services (e.g., Vertex AI if configured).
 
 ## 3. Environment & Secret Management
 - [X] `.env` file (`multi_tool_agent/.env`) will be used for environment variables loaded by `python-dotenv`.
@@ -52,17 +52,17 @@ A checklist and project plan for developing and deploying a Google Agent Develop
     - [X] Copies `requirements.txt` and runs `pip install`.
     - [X] Copies the `multi_tool_agent/` directory into the image.
     - [X] Copies `multi_tool_agent/.env` into `/app/multi_tool_agent/.env` in the image.
-    - [ ] Copy `main.py` to `/app/main.py` in the `Dockerfile`.
-    - [ ] **Update `Dockerfile CMD`**: Set to `CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $PORT"]`.
-- [ ] `.gitignore` file created/updated to include:
-    - [ ] `multi_tool_agent/.env` (if not already, though it's copied to Docker)
-    - [ ] `.venv/`
-    - [ ] `__pycache__/`
-    - [ ] `*.pyc`
-- [ ] Docker image built locally (e.g., `docker build -t my-agent-app .`).
+    - [X] Copy `main.py` to `/app/main.py` in the `Dockerfile`.
+    - [X] **Update `Dockerfile CMD`**: Set to `CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $PORT"]`.
+- [X] `.gitignore` file created/updated to include:
+    - [X] `multi_tool_agent/.env`
+    - [X] `.venv/`
+    - [X] `__pycache__/`
+    - [X] `*.pyc`
+- [X] Docker image built locally (e.g., `docker build -t my-agent-app .`).
 - [ ] Local Docker container tested:
-    - [ ] Run with port mapping and environment variables: `docker run -p 8080:8080 -e PORT=8080 --env-file multi_tool_agent/.env my-agent-app`.
-    - [ ] Test by sending HTTP requests to `http://localhost:8080`.
+    - [x] Run with port mapping and environment variables: `docker run -p 8080:8080 -e PORT=8080 --env-file multi_tool_agent/.env my-agent-app`.
+    - [x] Test by sending HTTP requests to `http://localhost:8080`.
 - [ ] Docker image pushed to Google Artifact Registry (e.g., `gcloud artifacts docker push ...`).
 
 ## 6. Cloud Run Deployment

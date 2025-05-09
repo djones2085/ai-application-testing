@@ -1,18 +1,32 @@
-FROM python:3.9-slim
+# Use an official Python runtime as a parent image
+FROM python:3.13-slim
 
+# Set the working directory in the container
 WORKDIR /app
 
+# Copy the dependencies file to the working directory
 COPY requirements.txt requirements.txt
+
+# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy the agent code into the container
 COPY multi_tool_agent/ ./multi_tool_agent/
+
+# Copy the main application file
+COPY main.py main.py
+
+# Copy the .env file for the agent (if it's not exclusively for local dev and needed in the container)
+# Ensure this is appropriate for your security model. Secrets are better handled via Secret Manager in Cloud Run.
 COPY multi_tool_agent/.env ./multi_tool_agent/.env
 
-# Assuming your agent is started by running the agent.py script.
-# If you have a different way to start it (e.g., a main.py that imports and runs the agent),
-# please adjust the CMD instruction.
-# For Cloud Run, your application needs to listen on the port defined by the PORT environment variable.
-# The google-adk Agent might handle this automatically or require specific configuration.
-# For now, I'll assume a simple execution. If it needs to be served via an HTTP server,
-# we might need to add gunicorn or a similar WSGI server.
-CMD ["python", "multi_tool_agent/agent.py"] 
+# Make port 8080 available to the world outside this container
+# Cloud Run will set the PORT environment variable, Uvicorn will use it.
+EXPOSE 8080
+
+# Define environment variable for the PORT (Uvicorn will pick this up if set)
+# ENV PORT 8080 # This is often set by the Cloud Run environment itself.
+
+# Run main.py when the container launches
+# The command uses sh -c to properly expand the $PORT environment variable.
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $PORT"] 
