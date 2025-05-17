@@ -1,0 +1,5 @@
+Shed Dimensions:
+Length: 10 ft
+Width: 8 ft
+Height: 6 ft
+Specific notes: Door on the 8ft wall, window on the 10ft wall. 
